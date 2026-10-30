@@ -1,0 +1,164 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>FFH4X WG</title>
+<style>
+  :root{--bg:#06101f;--panel:#0a1a2e;--panel2:#0d2138;--line:#16324f;--txt:#eaf4ff;--dim:#7fa3c8;
+    --blue:#1e90ff;--blue2:#00b3ff;--yellow:#ffd400;--danger:#ff4d6d;--ok:#39d98a;--radius:14px}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%;background:radial-gradient(900px 500px at 50% -10%,#0d2138 0%,var(--bg) 60%);
+    color:var(--txt);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;font-size:14px}
+  body{padding:14px 12px 100px}
+  .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:18px;letter-spacing:.5px}
+  .logo .dot{width:11px;height:11px;border-radius:50%;background:var(--yellow);
+    box-shadow:0 0 14px var(--yellow);animation:p 1.4s ease-in-out infinite}
+  @keyframes p{50%{opacity:.3;transform:scale(.7)}}
+  .logo small{color:var(--yellow);font-weight:700;font-size:11px;letter-spacing:1px}
+  .badge{font-size:10px;padding:4px 10px;border-radius:20px;letter-spacing:.5px;
+    background:rgba(30,144,255,.15);color:var(--blue2);border:1px solid rgba(30,144,255,.4)}
+  .card{background:linear-gradient(180deg,rgba(10,26,46,.98),rgba(6,16,31,.98));
+    border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+  .card h3{margin:0 0 10px;font-size:11.5px;letter-spacing:1.3px;text-transform:uppercase;
+    color:var(--dim);font-weight:700}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.05)}
+  .row:last-child{border-bottom:none}
+  .row .lbl b{font-size:13.5px;font-weight:600;display:block}
+  .row .lbl span{font-size:11px;color:var(--dim)}
+  .sw{position:relative;width:48px;height:26px;flex:0 0 auto}
+  .sw input{opacity:0;width:0;height:0;position:absolute}
+  .sw .sl{position:absolute;inset:0;background:#0f2238;border-radius:26px;cursor:pointer;
+    transition:.2s;border:1px solid var(--line)}
+  .sw .sl::before{content:"";position:absolute;width:20px;height:20px;left:2px;top:2px;
+    background:#4a6b8a;border-radius:50%;transition:.2s}
+  .sw input:checked + .sl{background:linear-gradient(135deg,var(--blue),var(--yellow));border-color:transparent}
+  .sw input:checked + .sl::before{transform:translateX(22px);background:#06101f}
+  .sw input:disabled + .sl{opacity:.4;cursor:not-allowed}
+  .slide{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .slide:last-child{border-bottom:none}
+  .slide .top{display:flex;justify-content:space-between;margin-bottom:7px}
+  .slide .top b{font-size:12.5px}
+  .slide .top .v{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--yellow);
+    background:rgba(255,212,0,.12);padding:1px 9px;border-radius:6px;font-weight:700;min-width:52px;text-align:center}
+  input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:#0f2238;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;
+    background:linear-gradient(135deg,var(--blue),var(--yellow));cursor:pointer;box-shadow:0 0 10px rgba(30,144,255,.6)}
+  .inject{width:100%;padding:15px;border:none;border-radius:13px;cursor:pointer;font-weight:900;
+    font-size:14.5px;letter-spacing:.7px;text-transform:uppercase;color:#04140f;
+    background:linear-gradient(135deg,var(--yellow),var(--blue));box-shadow:0 10px 32px rgba(30,144,255,.4);
+    transition:.2s;position:relative;overflow:hidden}
+  .inject:active{transform:scale(.98)}
+  .inject.loading{background:linear-gradient(135deg,#ffd166,#ff9f1c);cursor:progress;pointer-events:none}
+  .inject.success{background:linear-gradient(135deg,var(--ok),#00e0a4)}
+  .inject .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:rgba(0,0,0,.5);transition:width .1s linear}
+  .note{font-size:10.5px;color:var(--dim);line-height:1.5;margin-top:8px;
+    padding:9px 11px;border-radius:9px;background:rgba(255,212,0,.05);border:1px solid rgba(255,212,0,.18)}
+  .foot{position:fixed;left:0;right:0;bottom:0;padding:12px 12px calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(to top,var(--bg) 55%,transparent);z-index:50}
+  .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-20px);background:var(--panel);
+    border:1px solid var(--line);color:var(--txt);padding:10px 16px;border-radius:10px;font-size:12.5px;
+    opacity:0;pointer-events:none;transition:.25s;z-index:70}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.ok{border-color:var(--ok);color:var(--ok)}
+</style></head>
+<body>
+
+<div class="head">
+  <div class="logo"><span class="dot"></span>FFH4X <small>WG</small></div>
+  <span class="badge">sem root · ESP</span>
+</div>
+
+<div class="card">
+  <h3>Visual</h3>
+  <div class="row">
+    <div class="lbl"><b>ESP</b><span>Caixas nos inimigos visíveis</span></div>
+    <label class="sw"><input type="checkbox" id="esp"><span class="sl"></span></label>
+  </div>
+  <div class="slide">
+    <div class="top"><b>FOV</b><span class="v" id="fovVal">200</span></div>
+    <input type="range" id="fov" min="80" max="600" value="200">
+  </div>
+  <div class="row">
+    <div class="lbl"><b>Círculo de FOV</b><span>Indicador na tela</span></div>
+    <label class="sw"><input type="checkbox" id="fovCircle" checked><span class="sl"></span></label>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Mira (requer root)</h3>
+  <div class="row">
+    <div class="lbl"><b>Aimbot</b><span>Trava mira — indisponível sem root</span></div>
+    <label class="sw"><input type="checkbox" id="aimbot" disabled><span class="sl"></span></label>
+  </div>
+  <div class="note">Aimbot exige escrita na memória do jogo. Sem root, o Android bloqueia. Esta opção fica desativada e não engana você.</div>
+</div>
+
+<div class="foot">
+  <button class="inject" id="btnInject">
+    <span id="injTxt">Injetar</span>
+    <span class="bar" id="injBar"></span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const cfg = { esp:false, fov:200, fovCircle:true };
+  function push(){
+    const s = JSON.stringify(cfg);
+    if (window.WGBridge && window.WGBridge.setConfig) {
+      try { window.WGBridge.setConfig(s); } catch(e){}
+    }
+  }
+  $("esp").addEventListener("change", e => { cfg.esp = e.target.checked; push(); resetInject(); });
+  $("fovCircle").addEventListener("change", e => { cfg.fovCircle = e.target.checked; push(); resetInject(); });
+  $("fov").addEventListener("input", e => {
+    cfg.fov = +e.target.value;
+    $("fovVal").textContent = cfg.fov;
+    push(); resetInject();
+  });
+
+  const btn = $("btnInject"), txt = $("injTxt"), bar = $("injBar");
+  let phase = "idle", t1 = null, raf = null;
+  function vis(kind, label){
+    btn.classList.remove("loading","success");
+    if (kind==="loading") btn.classList.add("loading");
+    if (kind==="success") btn.classList.add("success");
+    txt.textContent = label;
+  }
+  function startInject(){
+    if (phase==="loading") return;
+    phase="loading"; vis("loading","Injetando..."); bar.style.width="0%";
+    push();
+    if (window.WGBridge && window.WGBridge.start) {
+      try { window.WGBridge.start(); } catch(e){}
+    }
+    const s = performance.now();
+    const tick = n => {
+      const p = Math.min(1,(n-s)/5000);
+      bar.style.width = (p*100)+"%";
+      if (p<1 && phase==="loading") raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    clearTimeout(t1);
+    t1 = setTimeout(()=>{
+      if (phase!=="loading") return;
+      phase="success"; vis("success","Injetado com sucesso"); bar.style.width="100%";
+    },5000);
+  }
+  function resetInject(){
+    if (phase==="loading"){
+      clearTimeout(t1); cancelAnimationFrame(raf); phase="idle";
+      bar.style.width="0%"; vis("idle","Injetar"); return;
+    }
+    if (phase==="success"){
+      phase="idle"; bar.style.width="0%"; vis("idle","Injetar");
+    }
+  }
+  btn.addEventListener("click", startInject);
+  push();
+})();
+</script>
+</body></html>
